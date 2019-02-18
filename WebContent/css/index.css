@@ -1,7 +1,7 @@
 /*
  * 작성자: 라대성
  * 작성일: 190215
- * 기능: index 화면을 구성하는 navBar, header, content, footer 에 대한 기본 스타일 모음
+ * 기능:  index 화면에 대한 기본 스타일 모음
  */
 
 @charset "UTF-8";
@@ -36,67 +36,6 @@
 		border-radius: 25px;
 		/* border: 1px solid black; */
 	}
-}
-
-/* top */
-#top {
-	margin: 15px 0 5px 0;
-	/* border: 1px solid black; */
-}
-#topLogo {
-	width: 40px;
-	height: 32px;
-	margin: 0px 0 10px 0 ;
-	/* border: 1px solid black; */
-}
-#title {
-	display: inline-block;
-	font-size: 16pt;
-	padding-top: 5px;
-	/* border: 1px solid black; */
-}
-#searchForm {
-	margin: 5px 0 5px 0;
-	/* border: 1px solid black; */
-}
-.my-search-bar {
-	margin: 5px 0 -5px 0;
-	/* border: 1px solid black; */
-}
-.btn-sm {
-	margin-bottom: 5px;
-}
-
-/* navbar */
-.my-nav {
-	
-}
-
-/* header */
-#headerContainer {
-	height: 460px;
-	background-image: url('/junggo/img/junggo/background01.jpg');
-	background-size: cover;
-	/* border: 1px solid black; */
-}
-#headerContent {
-	position: relative;
-	padding-top: 120px;
-	text-align: left;
-	/* border: 1px solid black; */
-}
-.fadeIn {
-	display: inline-block;
-	margin: 0 0 30px 80px;
-	/* border: 1px solid black; */
-}
-.fadeIn h1, .fadeIn p {
-	display: none;
-}
-#toTop {
-	position: fixed;
-	right: 40px;
-	bottom: 120px;
 }
 
 /* article */

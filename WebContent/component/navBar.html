@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>navbar component</title>
+</head>
+<body>
+
+	<div class='navbar navbar-expand-md bg-light navbar-light sticky-top my-nav'>
+		<div class='container'>
+			<button class='navbar-toggler collapsed' type='button' data-toggle='collapse' data-target='#navbarResponsive'
+				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class='navbar-toggler-icon'></span>
+			</button>
+			<div class='collapse navbar-collapse' id='navbarResponsive'>
+				<ul class='navbar-nav' style='color: #343434'>
+					<li class='nav-item'>
+						<a class='nav-link' href='#home' onclick='/junggo/index.jsp'>Home</a>
+					</li>
+					<li class='nav-item'>
+						<a class='nav-link' href='#buy' onclick='funcMovePage("content")'>삽니다</a>
+					</li>
+					<li class='nav-item'>
+						<a class='nav-link' href='#sell' onclick='funcMovePage("content")'>팝니다</a>
+					</li>
+				</ul>
+			</div>
+			<div class='navbar navbar-nav navbar-right'>
+				<div class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' href='#' style='color: #343434;'>
+						접속<span class='caret'></span>
+					</a>
+					<ul class='dropdown-menu dropdown-menu-right animate slideIn'>
+						<li><a class='dropdown-item' id='loginAnc' href='#login'>로그인</a></li>
+						<li><a class='dropdown-item' id='joinAnc' href='#join'>회원가입</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
