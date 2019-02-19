@@ -26,6 +26,8 @@ $(function () {
 	$('.fadeIn > p').fadeIn(1000);
 	$('.fadeIn > .my-btn').delay('slow').fadeIn(1000);
 	
+	// 로그인 모달 창 불러오기
+	// 이후 funcLoginAction 함수 실행
 	$('#loginAnc').click(function () {
 		$.ajax({
 			type: 'get',
@@ -38,24 +40,28 @@ $(function () {
 				innerModalContent.innerHTML = html;
 				modalWindow.style.display = 'block';
 				
-				loginlogin();
+				funcLoginAction();
 			}
 		})
 	});
+	// 조인 모달 창 불러오기
+	// 이후 funcJoinAction 함수 실행
 	$('#joinAnc').click(function () {
 		$.ajax({
 			type: 'get',
 			url: '/junggo/component/joinForm.html',
 			dataType: 'html',
 			success: function (html, status) {
-				modalContent.setAttribute('style', 'height: 78%; margin: 7% auto;');
-				innerModalContent.setAttribute('style', 'position: absolute; width: 97%; height: 90%; top: 0;');
+				modalContent.setAttribute('style', 'height: 82%; margin: 7% auto;');
+				innerModalContent.setAttribute('style', 'position: absolute; width: 97%; height: 94%; top: 0;');
 				
 				innerModalContent.innerHTML = html;
 				modalWindow.style.display = 'block';
 				
-				joinjoin();
+				juncJoinAction();
 			}
 		})
 	});
+	
+	$('#btnLoadJBoardBuy')
 });

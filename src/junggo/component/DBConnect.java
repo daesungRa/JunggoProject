@@ -1,4 +1,4 @@
-package junggo.board;
+package junggo.component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

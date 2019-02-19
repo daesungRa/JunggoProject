@@ -13,34 +13,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<style>
-a {color: black;}
-#brd_title {padding:20px;box-sizing: border-box;font-family: 'Helvetica';font-size: 48px;font-weight: bold;}
-#thumbnail {width:100%;height:200px;}
-.row .page-item {display:inline-block;list-style:none;font-size:20px;}
-.col-md-4:hover {background-color: #dfdfdf;}
-</style>
-<script>
-function categoryTogle(){
-	var val = $('#btnToggle').val();
-	console.log(val);
-	var frm = document.frm;
-	if(val == '삽니다'){
-		location.href='./clone_board_list.jsp?category=1';
-	}else if(val == '팝니다'){
-		location.href='./clone_board_list.jsp?category=0';
-	}
-}
-function movePage(nowPage){
-	var frm = document.frm;
-	frm.nowPage.value = nowPage;
-	frm.submit();
-}
-function bdSearch() {
-	var frm = document.frm;
-	location.href='index.jsp?content=./clone_board_list.jsp?search='+frm.tf.value;
-}
-</script>
 </head>
 <body>
 	<%

@@ -10,6 +10,8 @@
 <!-- style -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/junggo/css/index.css" />
+<link rel="stylesheet" href="/junggo/css/jBoard.css" />
+<link rel="stylesheet" href="/junggo/css/jMember.css" />
 <link rel="stylesheet" href="/junggo/css/component.css" />
 
 <!-- script -->
@@ -18,6 +20,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script src="/junggo/js/index.js"></script>
+<script src="/junggo/js/jBoard.js"></script>
+<script src="/junggo/js/jMember.js"></script>
 <script src="/junggo/js/component.js"></script>
 </head>
 <body onresize="getWindowSize()">
@@ -48,24 +52,10 @@
 				<div class='col-lg-3 my-intro-grid align-items-center'>소개글입니다</div>
 				<div class='col-lg-2 my-intro-grid'></div>
 			</div>
-		</div>
-		<hr /> -->
+		</div> -->
+		<hr />
 		<!-- 게시판 로드 -->
 		<div class='container my-board' id='content'>
-			<h3>게시판 페이지</h3>
-			<!-- 이하는 예시임 -->
-			<div class='row my-board-row'>
-				<div class='col-lg-3 my-board-grid'>게시글 1</div>
-				<div class='col-lg-3 my-board-grid'>게시글 2</div>
-				<div class='col-lg-3 my-board-grid'>게시글 3</div>
-				<div class='col-lg-3 my-board-grid'>게시글 4</div>
-			</div>
-			<div class='row my-board-row'>
-				<div class='col-lg-3 my-board-grid'>게시글 5</div>
-				<div class='col-lg-3 my-board-grid'>게시글 6</div>
-				<div class='col-lg-3 my-board-grid'>게시글 7</div>
-				<div class='col-lg-3 my-board-grid'>게시글 8</div>
-			</div>
 		</div>
 		<hr />
 		<!-- 개발자 소개 -->

@@ -1,0 +1,18 @@
+/*
+ * 작성자: 이동훈
+ * 작성일: 190219
+ * 기능:  게시판 화면에 대한 기본 스타일 모음
+ */
+
+@charset "UTF-8";
+
+/* list page */
+a {color: black;}
+#brd_title {padding:20px;box-sizing: border-box;font-family: 'Helvetica';font-size: 48px;font-weight: bold;}
+#thumbnail {width:100%;height:200px;}
+.row .page-item {display:inline-block;list-style:none;font-size:20px;}
+.col-md-4:hover {background-color: #dfdfdf;}
+
+/* view page */
+.container{border: 1px solid black;}
+#precautions{border: 1px dotted gray; background-color:#fdfdfd;}

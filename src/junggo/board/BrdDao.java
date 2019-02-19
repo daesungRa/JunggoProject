@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import junggo.component.DBConnect;
+
 public class BrdDao {
 	Connection conn;
 	PreparedStatement ps;
