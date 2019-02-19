@@ -1,4 +1,4 @@
-<%@page import="junggo.board.BrdVo"%>
+<%-- <%@page import="junggo.board.BrdVo"%>
 <%@page import="junggo.board.BrdDao"%>
 <%@page import="java.util.List"%>
 
@@ -100,4 +100,4 @@
 	});
 	</script>
 </body>
-</html>
+</html> --%>
