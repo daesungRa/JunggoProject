@@ -31,7 +31,7 @@ $(function () {
 	$('#loginAnc').click(function () {
 		$.ajax({
 			type: 'get',
-			url: '/junggo/component/loginForm.html',
+			url: '/junggo/views/jmember/jmember_login.jsp',
 			dataType: 'html',
 			success: function (html, status) {
 				modalContent.setAttribute('style', 'height: 60%; margin: 14% auto;');
@@ -49,7 +49,7 @@ $(function () {
 	$('#joinAnc').click(function () {
 		$.ajax({
 			type: 'get',
-			url: '/junggo/component/joinForm.html',
+			url: '/junggo/views/jmember/jmember_join.jsp',
 			dataType: 'html',
 			success: function (html, status) {
 				modalContent.setAttribute('style', 'height: 82%; margin: 7% auto;');
@@ -63,5 +63,45 @@ $(function () {
 		})
 	});
 	
-	$('#btnLoadJBoardBuy')
+	// post 방식으로 서블릿 컨테이너에 파라미터와 함께 요청해야 함
+	// 네비게이션의 삽니다 버튼
+	$('#btnLoadJBoardBuy').click(function () {
+		$.post('list.bd',
+		{
+			category: '1'
+		},
+		function (data, status){
+			$('#content').html(data);
+		});
+	});
+	// 네비게이션의 팝니다 버튼
+	$('#btnLoadJBoardSell').click(function () {
+		$.post('list.bd',
+		{
+			category: '0'
+		},
+		function (data, status){
+			$('#content').html(data);
+		});
+	});
+	// 헤더의 삽니다 버튼
+	$('#btnBuy').click(function () {
+		$.post('list.bd',
+		{
+			category: '1'
+		},
+		function (data, status){
+			$('#content').html(data);
+		});
+	});
+	// 헤더의 팝니다 버튼
+	$('#btnSell').click(function () {
+		$.post('list.bd',
+		{
+			category: '0'
+		},
+		function (data, status){
+			$('#content').html(data);
+		});
+	});
 });

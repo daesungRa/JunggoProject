@@ -4,6 +4,8 @@
  * 기능: 화면을 구성하는 top, navBar, loginForm, joinForm, header, footer, modal 에 대한 기본 스크립트 모음
  */
 
+		/* 로그인, 아이디 체크, 조인 함수 내 서블릿 요청경로 수정 필요(190219) */
+
 // 페이지 내 링크 이동
 function funcMovePage (page) {
 	var offset = $("#" + page).offset();

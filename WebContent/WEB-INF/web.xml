@@ -9,4 +9,22 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <!-- <servlet>
+  	<servlet-name>jboard</servlet-name>
+  	<servlet-class>junggo.jboard.JBoardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>jboard</servlet-name>
+  	<url-pattern>/jboard</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>jmember</servlet-name>
+  	<servlet-class>junggo.jboard.JMemberServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>jmember</servlet-name>
+  	<url-pattern>/jmember</url-pattern>
+  </servlet-mapping> -->
 </web-app>

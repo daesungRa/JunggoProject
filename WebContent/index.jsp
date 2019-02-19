@@ -9,6 +9,7 @@
 <title>Welcome to Junggo-heaven!</title>
 <!-- style -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
 <link rel="stylesheet" href="/junggo/css/index.css" />
 <link rel="stylesheet" href="/junggo/css/jBoard.css" />
 <link rel="stylesheet" href="/junggo/css/jMember.css" />
@@ -32,13 +33,13 @@
 	</div> -->
 
 	<!-- top -->
-	<jsp:include page="/component/top.html"></jsp:include>
+	<jsp:include page="/views/component/top.html"></jsp:include>
 	
 	<!-- navbar -->
-	<jsp:include page="/component/navBar.html"></jsp:include>
+	<jsp:include page="/views/component/navBar.html"></jsp:include>
 	
 	<!-- header -->
-	<jsp:include page="/component/header.html"></jsp:include>
+	<jsp:include page="/views/component/header.html"></jsp:include>
 	
 	<!-- article -->
 	<article>
@@ -58,28 +59,17 @@
 		<div class='container my-board' id='content'>
 		</div>
 		<hr />
-		<!-- 개발자 소개 -->
-		<!-- <div class='container my-intro' id='developers'>
-			이하는 예시임
-			<div class='row my-intro-row'>
-				<div class='col-lg-2 my-intro-grid'></div>
-				<div class='col-lg-3 my-intro-grid'>개발자</div>
-				<div class='col-lg-2 my-intro-grid'></div>
-				<div class='col-lg-3 my-intro-grid'>소개소개</div>
-				<div class='col-lg-2 my-intro-grid'></div>
-			</div>
-		</div> -->
 	</article>
 	
 	<!-- footer -->
-	<jsp:include page="/component/footer.html"></jsp:include>
+	<jsp:include page="/views/component/footer.html"></jsp:include>
 	
 	<a class='btn btn-info' id='toTop' href='#top' onclick='funcMovePage("top")'>
 		<span class='glyphicon glyphicon-chevron-up' aria-hidden="true"></span>top
 	</a>
 	
 	<!-- Modal -->
-	<jsp:include page="/component/modal.html"></jsp:include>
+	<jsp:include page="/views/component/modal.html"></jsp:include>
 
 </body>
 </html>

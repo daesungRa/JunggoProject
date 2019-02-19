@@ -1,4 +1,4 @@
-package junggo.board;
+package junggo.jboard;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import junggo.component.DBConnect;
 
-public class BrdDao {
+public class JBoardDao {
 	Connection conn;
 	PreparedStatement ps;
 	ResultSet rs;
@@ -42,7 +42,10 @@ public class BrdDao {
 	public int blockSize = 3;   
 	public int nowPage; 
 	
-	public BrdDao() {
+	/*
+	 * 기존 작성한 dao, vo 그대로 뒀음. 수정이 필요하다면 수정
+	 */
+	public JBoardDao() {
 		conn = new DBConnect().getConn();
 		ps = null;
 		rs = null;
@@ -53,10 +56,10 @@ public class BrdDao {
 			e.printStackTrace();
 		}
 	}
-	public BrdVo view(String serial) {
+	public JBoardVo view(String serial) {
 		if(serial.equals("")) return null;
 		
-		BrdVo result = new BrdVo();
+		JBoardVo result = new JBoardVo();
 		try {
 			sql = "update jboard set jboard_hit = jboard_hit + 1 where jboard_serial = ?";
 			ps = conn.prepareStatement(sql);
@@ -115,11 +118,11 @@ public class BrdDao {
 			e.printStackTrace();
 		}
 	}
-	public List<BrdVo> list(String findStr, int nowPage, int category){
+	public List<JBoardVo> list(String findStr, int nowPage, int category){
 		this.nowPage = nowPage;
 		pageCompute(findStr, category);
 		
-		List<BrdVo> list = new ArrayList<>();
+		List<JBoardVo> list = new ArrayList<>();
 		
 		sql = "select * from ( "
 				+ "select rownum rno, s.* from ( "
@@ -138,7 +141,7 @@ public class BrdDao {
 			ps.setInt(5, endNo);   //9
 			rs = ps.executeQuery();
 			while(rs.next()) { //?
-				BrdVo vo = new BrdVo();
+				JBoardVo vo = new JBoardVo();
 				vo.setSerial(rs.getInt("jboard_serial")+"");
 				vo.setSubject(rs.getString("jboard_subject"));
 				vo.setContent(rs.getString("jboard_content"));
@@ -157,7 +160,7 @@ public class BrdDao {
 		}
 		return list;
 	}
-	public boolean getAttfile(String serial, BrdVo vo) {
+	public boolean getAttfile(String serial, JBoardVo vo) {
 		boolean result = true;
 		
 		try {
@@ -174,8 +177,8 @@ public class BrdDao {
 		}
 		return result;
 	}
-	public BrdVo setVo(HttpServletRequest req) {
-		BrdVo vo = new BrdVo();
+	public JBoardVo setVo(HttpServletRequest req) {
+		JBoardVo vo = new JBoardVo();
 		//첨부 파일 리스트
 		List<String> attFiles = new ArrayList<>();
 		//삭제 파일 리스트

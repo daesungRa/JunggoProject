@@ -1,9 +1,14 @@
-package junggo.board;
+package junggo.jboard;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class BrdVo {
+public class JBoardVo {
+	/*
+	 * 기존 작성한 dao, vo 그대로 뒀음. 수정이 필요하다면 수정
+	 * JCOMMENT 댓글 테이블에 대한 처리를 어떻게 할지 결정 필요
+	 */
+	
 	String serial;
 	String subject;
 	String content;
@@ -34,7 +39,7 @@ public class BrdVo {
 				serial, subject, content, mdate, id, pwd, hit, rep, price, photo).replaceAll("\'", "\"");
 	}
 	
-	public BrdVo() {}
+	public JBoardVo() {}
 	
 	public String getSerial() {
 		return serial;
