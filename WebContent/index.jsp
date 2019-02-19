@@ -23,9 +23,9 @@
 <body onresize="getWindowSize()">
 	
 	<!-- 브라우저 크기 확인 (임시) -->
-	<div id='windowSize' style='width: 180px; border: 1px solid black;'>
+	<!-- <div id='windowSize' style='width: 180px; border: 1px solid black;'>
 		window size : 
-	</div>
+	</div> -->
 
 	<!-- top -->
 	<jsp:include page="/component/top.html"></jsp:include>
@@ -39,8 +39,8 @@
 	<!-- article -->
 	<article>
 		<!-- 사이트 소개 -->
-		<div class='container my-intro' id='intro'>
-			<!-- 이하는 예시임 -->
+		<!-- <div class='container my-intro' id='intro'>
+			이하는 예시임
 			<div class='row my-intro-row'>
 				<div class='col-lg-2 my-intro-grid'></div>
 				<div class='col-lg-3 my-intro-grid align-items-center'>안녕하세요</div>
@@ -49,7 +49,7 @@
 				<div class='col-lg-2 my-intro-grid'></div>
 			</div>
 		</div>
-		<hr />
+		<hr /> -->
 		<!-- 게시판 로드 -->
 		<div class='container my-board' id='content'>
 			<h3>게시판 페이지</h3>
@@ -69,8 +69,8 @@
 		</div>
 		<hr />
 		<!-- 개발자 소개 -->
-		<div class='container my-intro' id='developers'>
-			<!-- 이하는 예시임 -->
+		<!-- <div class='container my-intro' id='developers'>
+			이하는 예시임
 			<div class='row my-intro-row'>
 				<div class='col-lg-2 my-intro-grid'></div>
 				<div class='col-lg-3 my-intro-grid'>개발자</div>
@@ -78,7 +78,7 @@
 				<div class='col-lg-3 my-intro-grid'>소개소개</div>
 				<div class='col-lg-2 my-intro-grid'></div>
 			</div>
-		</div>
+		</div> -->
 	</article>
 	
 	<!-- footer -->

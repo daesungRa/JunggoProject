@@ -5,16 +5,17 @@
  */
 
 $(function () {
+	// 모달
 	var modalWindow = document.getElementById('modalWindow');
 	var modalContent = document.getElementById('modalContent');
 	var innerModalContent = document.getElementById('innerModalContent');
 	
-	$(window).click(function (ev) {
+	$(window).click(function (ev) { // 모달 외 화면 클릭 시
 		if (ev.target == modalWindow) {
 			modalWindow.style.display = 'none';
 		}
 	});
-	$(window).keydown(function (ev) {
+	$(window).keydown(function (ev) { // esc 버튼 입력 시
 		if (ev.keyCode == '27') {
 			modalWindow.style.display = 'none';
 		}
@@ -31,7 +32,7 @@ $(function () {
 			url: '/junggo/component/loginForm.html',
 			dataType: 'html',
 			success: function (html, status) {
-				modalContent.setAttribute('style', 'height: 60%; margin: 12% auto;');
+				modalContent.setAttribute('style', 'height: 60%; margin: 14% auto;');
 				innerModalContent.setAttribute('style', 'position: absolute; width: 96%; height: 90%; top: -10px;');
 				
 				innerModalContent.innerHTML = html;
