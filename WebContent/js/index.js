@@ -21,7 +21,7 @@ $(function () {
 		}
 	});
 	$('#closeModal').click(function () {
-		
+		modalWindow.style.display = 'none';
 	});
 	
 	// 헤더 페이드인/아웃

@@ -15,7 +15,7 @@
 			<div style='margin: 20px 0 10px 0;'>
 				<img class="profile-img" src='/junggo/img/logo/cat_foot_empty.svg' alt="">&nbsp;&nbsp;중고천국<br/>
 			</div>
-			<h3>회원가입 페이지</h3><br/>
+			<h3>회원가입</h3><br/>
 			<form class='form' name='joinFrm' id='joinFrm' action='#joinAction' method='post' enctype='multipart/form-data'>
 				<div class='form-group'>
 					<div class='form-inline'>
