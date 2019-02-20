@@ -20,6 +20,9 @@ $(function () {
 			modalWindow.style.display = 'none';
 		}
 	});
+	$('#closeModal').click(function () {
+		
+	});
 	
 	// 헤더 페이드인/아웃
 	$('.fadeIn > h1').fadeIn(1000);
@@ -58,7 +61,7 @@ $(function () {
 				innerModalContent.innerHTML = html;
 				modalWindow.style.display = 'block';
 				
-				juncJoinAction();
+				funcJoinAction();
 			}
 		})
 	});

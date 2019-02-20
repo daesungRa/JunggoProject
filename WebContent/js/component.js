@@ -41,7 +41,7 @@ function funcLoginAction () {
 	var loginFrm = $('#loginFrm');
 	var mid = $('#loginFrm #mid');
 	var pwd = $('#loginFrm #pwd');
-	var btnSubmit = $('#loginFrm #btnSubmit');
+	var btnLoginSubmit = $('#loginFrm #btnLoginSubmit');
 	
 	mid.focus();
 	mid.keyup(function (ev) {
@@ -51,11 +51,11 @@ function funcLoginAction () {
 	});
 	pwd.keyup(function (ev) {
 		if (ev.keyCode == '13') {
-			btnSubmit.trigger('click');
+			btnLoginSubmit.trigger('click');
 		}
 	});
 	
-	btnSubmit.click(function () {
+	btnLoginSubmit.click(function () {
 		if (mid.val() == '') {
 			alert('아이디를 입력하세요.');
 			mid.focus();
@@ -69,7 +69,8 @@ function funcLoginAction () {
 }
 
 //입력 내용 체크 후 조인 실행 함수
-function juncJoinAction () {
+function funcJoinAction () {
+	var xhr = new XMLHttpRequest();
 	var joinFrm = document.joinFrm;
 	
 	joinFrm.mid.focus();
@@ -105,8 +106,8 @@ function juncJoinAction () {
 	// photo file
 	joinFrm.photo.onchange = imagePreView;
 	// btn submit
-	joinFrm.btnSubmit.onclick = function () {
-		funcSubmit(joinFrm);
+	joinFrm.btnJoinSubmit.onclick = function () {
+		funcJoinSubmit(joinFrm);
 	}
 	// cancel
 	joinFrm.btnCancel.onclick = function () {
@@ -128,7 +129,7 @@ function funcIdChk (xhr) {
 	}
 
 	if (btnIdChk.value == '중복확인') {
-		xhr.open('post', '/desktop/member/idChk');
+		xhr.open('post', 'idCheck.mb');
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.send('mid=' + mid.value);
 		xhr.onreadystatechange = function () {
@@ -239,8 +240,8 @@ function imagePreView (e) {
         profile.src = img.src;
     }
 }
-// 최종 제출 함수
-function funcSubmit (frm) {
+// 회원가입 최종 제출 함수
+function funcJoinSubmit (frm) {
 	// 폼 내부 모든 input 중 타입이 hidden 인 태그만 검증
 	var inputs = frm.getElementsByTagName('input');
 	for (var i = 0; i < inputs.length; i++) {
@@ -279,5 +280,45 @@ function funcSubmit (frm) {
 		}
 	} // 입력 데이터 검증 로직 끝
 	
-	frm.submit();
+	// 제출
+	// frm.submit();
+	var formData = new FormData(frm);
+	$.ajax({
+		url: 'join.mb',
+		data: formData,
+		contentType: false,
+		processData: false,
+		type: 'post',
+		success: function (data) {
+			var result = data;
+			alert("조인 결과: " + result);
+			if (result == '1') { // 회원가입 성공, 로그인 페이지로 이동
+				alert('회원가입에 성공했습니다. 로그인해 주십시오.');
+				
+				// 로그인 모달 열기
+				var modalWindow = document.getElementById('modalWindow');
+				var modalContent = document.getElementById('modalContent');
+				var innerModalContent = document.getElementById('innerModalContent');
+				
+				$.ajax({
+					type: 'get',
+					url: '/junggo/views/jmember/jmember_login.jsp',
+					dataType: 'html',
+					success: function (html, status) {
+						modalContent.setAttribute('style', 'height: 60%; margin: 14% auto;');
+						innerModalContent.setAttribute('style', 'position: absolute; width: 96%; height: 90%; top: -10px;');
+						
+						innerModalContent.innerHTML = html;
+						modalWindow.style.display = 'block';
+						
+						funcLoginAction();
+					}
+				})
+			} else if (data == '0') { // 회원가입 실패, 페이지로 이동 없음
+				alert('회원가입에 실패했습니다. 입력 정보를 다시 확인하세요.');
+				frm.mid.focus();
+				frm.mid.select();
+			}
+		}
+	})
 } // end of join function

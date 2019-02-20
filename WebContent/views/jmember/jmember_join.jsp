@@ -16,7 +16,7 @@
 				<img class="profile-img" src='/junggo/img/logo/cat_foot_empty.svg' alt="">&nbsp;&nbsp;중고천국<br/>
 			</div>
 			<h3>회원가입 페이지</h3><br/>
-			<form class='form' name='joinFrm' id='joinFrm' action='' method='post' enctype='multipart/form-data'>
+			<form class='form' name='joinFrm' id='joinFrm' action='#joinAction' method='post' enctype='multipart/form-data'>
 				<div class='form-group'>
 					<div class='form-inline'>
 						<input class='form-control' type='text' id='mid' name='mid' maxlength='30' placeholder='아이디 입력 (필수)' style='width: 48%; margin-right: 10px;'/>
@@ -58,7 +58,7 @@
 					<input type='file' id='photo' name='photo' value='photo' multiple="multiple" required="required"/><br/>
 				</div>
 				<div class='form-group'>
-					<input class='btn btn-primary' type='button' id='btnSubmit' name='btnSubmit' value='제 출' />
+					<input class='btn btn-primary' type='button' id='btnJoinSubmit' name='btnJoinSubmit' value='제 출' />
 					<input class='btn btn-primary' type='button' id='btnCancel' name='btnCancel' value='초기화' />
 				</div>
 			</form>

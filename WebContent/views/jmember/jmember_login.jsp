@@ -20,7 +20,7 @@
 					<form class='form-signin my-login-form' name='loginFrm' id='loginFrm' action='#loginlogin' method='post' style='width: 70%; margin: 10px auto;'>
 						<input class='form-control' type='text' name='mid' id='mid' placeholder='아이디 입력' /><br/>
 						<input class='form-control' type='password' name='pwd' id='pwd' placeholder='비밀번호 입력' /><br/>
-						<input class='btn btn-lg btn-info btn-block' type='button' id='btnSubmit' value='제 출' style='margin-top: 20px;' /><br/>
+						<input class='btn btn-lg btn-info btn-block' type='button' id='btnLoginSubmit' value='제 출' style='margin-top: 20px;' /><br/>
 					</form>
 				</div>
 			</div>

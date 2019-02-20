@@ -1,6 +1,7 @@
 package junggo.jmember;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -9,9 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import junggo.jboard.JBoardDao;
-import junggo.jboard.JBoardVo;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class memberServlet
@@ -46,10 +45,15 @@ public class JMemberServlet extends HttpServlet {
 		page = page.substring(page.lastIndexOf("/") + 1, page.lastIndexOf("."));
 		System.out.println("page: " + page); // 요청 페이지 확인
 		
-		// 사용할 dao, vo, list. 필요에 따라 사용
+		// 사용할 dao, vo, result, list 필요에 따라 사용
 		JMemberDao dao = new JMemberDao();
 		JMemberVo vo = null;
+		boolean result = false;
 		List<JMemberVo> list = null; // new ArrayList<JBoardVo>();
+		
+		// 세션, PrintWriter 객체 생성
+		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
 		
 		// 각 페이지 요청에 대한 처리
 		// jsp 화면 단에 보낼 데이터가 있다면 request 나 session 객체에 setAttribute 해서 처리하면 됨
@@ -59,12 +63,32 @@ public class JMemberServlet extends HttpServlet {
 		case "login":
 			
 			break;
-		case "join":
+		case "logout":
 			
 			break;
+		case "join":
+			result = dao.insert(request);
+			
+			if (result) {
+				System.out.println("회원가입 성공");
+				out.print("1");
+			} else {
+				System.out.println("회원가입 실패");
+				out.print("0");
+			}
+			
+			return; // 페이지 이동은 회원가입 결과에 따라 스크립트에서 처리
 		case "idCheck": // 별도처리
+			System.out.println(request.getParameter("mid"));
+			result = dao.idCheck(request.getParameter("mid"));
+			
+			if (result) {
+				out.print("1");
+			} else {
+				out.print("0");
+			}
 	
-			break;
+			return;
 		case "findId": // url02 로 별도처리
 	
 			break;
