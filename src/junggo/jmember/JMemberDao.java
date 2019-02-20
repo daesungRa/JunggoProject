@@ -35,6 +35,32 @@ public class JMemberDao {
 		} catch (Exception ex) { ex.printStackTrace(); }
 	}
 	
+	public JMemberVo login(JMemberVo vo) {  //로그인
+		JMemberVo v = null;
+		String sql = "select * from jmember where mid =? and pwd = ? " ;
+		
+	    try{
+	    	conn = new DBConnect().getConn();
+			ps = conn.prepareStatement(sql);  //import해줘야함
+			ps.setString(1, vo.getMid());
+			ps.setString(2, vo.getPwd());
+			rs = ps.executeQuery();
+			
+			if(rs.next()){
+				v = new JMemberVo();
+				v.setIrum(rs.getString("irum"));
+				v.setMid(rs.getString("mid"));
+			}
+
+	     }catch(Exception ex){
+	    	 ex.printStackTrace();
+	     }finally{
+	    	 closeSet();
+	     }
+	    
+	    return v;	    
+	}
+	
 	// 입력된 아이디로 아이디 중복체크
 	public boolean idCheck (String mid) {
 		boolean result = false;
@@ -120,5 +146,63 @@ public class JMemberDao {
 		}
 		
 		return result;
+	}
+	
+	// 아이디 찾기
+	  public JMemberVo findId(String irum, String receiver) {
+		  JMemberVo vo = null;
+		 
+		  conn = new DBConnect().getConn(); 
+		  PreparedStatement ps = null;
+		  ResultSet rs = null;
+
+		  try {
+			  String sql = "select * from jmember where irum=? and email=? ";
+
+			  ps = conn.prepareStatement(sql);
+
+			  ps.setString(1, irum);
+			  ps.setString(2, receiver); 
+
+			  rs = ps.executeQuery();
+			  
+			  if(rs.next()) {
+				vo = new JMemberVo();
+	    		   vo.setMid(rs.getString("mid"));
+	    		  
+			  }
+		  
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+	  }return vo;
+	}
+	
+	// 비번 찾기
+	public JMemberVo findPwd(String mid, String irum, String receiver) {
+		  JMemberVo vo = null;
+		 
+		  conn = new DBConnect().getConn(); 
+		  PreparedStatement ps = null;
+		  ResultSet rs = null;
+
+		  try {
+			  String sql = "select * from jmember where mid=? and irum=? and email=? ";
+
+			  ps = conn.prepareStatement(sql);
+			  ps.setString(1, mid);
+			  ps.setString(2, irum);
+			  ps.setString(3, receiver); 
+
+			  rs = ps.executeQuery();
+			  
+			  if(rs.next()) {
+				vo = new JMemberVo();
+	    		   vo.setPwd(rs.getString("pwd"));
+
+			  }
+		  
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+	  }return vo;
 	}
 }

@@ -63,7 +63,23 @@ function funcLoginAction () {
 			alert('비밀번호를 입력하세요.');
 			pwd.focus();
 		} else {
-			loginFrm.submit();
+			// loginFrm.submit();
+			$.post('login.mb',
+			{
+				mid: $('#loginFrm #mid').val(),
+				pwd: $('#loginFrm #pwd').val()
+			},
+			function (data, status){
+				var result = data;
+				if (result == '1') {
+					location.href = '/junggo/index.jsp';
+					
+				} else if (result == '0') {
+					alert('아이디나 암호를 확인해주세요.');
+					mid.focus();
+					mid.select();
+				}
+			});
 		}
 	});
 }

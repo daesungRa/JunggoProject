@@ -54,6 +54,7 @@ public class JMemberServlet extends HttpServlet {
 		// 세션, PrintWriter 객체 생성
 		HttpSession session = request.getSession();
 		PrintWriter out = response.getWriter();
+		RequestDispatcher dispatcher = null;
 		
 		// 각 페이지 요청에 대한 처리
 		// jsp 화면 단에 보낼 데이터가 있다면 request 나 session 객체에 setAttribute 해서 처리하면 됨
@@ -61,11 +62,40 @@ public class JMemberServlet extends HttpServlet {
 			// 아니면 response 객체로부터 out.print 사용
 		switch (page) {
 		case "login":
-			
-			break;
+			//request 객체 << form 정보들이 담겨
+			String mid = request.getParameter("mid");
+		    String pwd = request.getParameter("pwd");
+		    System.out.println("id: " + mid);
+		    System.out.println("pwd: " + pwd);
+
+		    vo = new JMemberVo();
+		    vo.setMid(mid);
+		    vo.setPwd(pwd);
+		    
+		    JMemberVo v = dao.login(vo); // 뷰로 반환할 vo 객체
+		    
+		    if (v != null) {
+		    	session.setAttribute("mid", v.getMid());
+		    	session.setAttribute("irum", v.getIrum());
+		    	out.print("1");
+		    } else {
+		    	// 1. index 페이지에서 로그인이 실패되었다는 사실을 인지할 수 있도록 처리
+		    	//		> 인지가 되었다면, 로그인 모달 창을 자동으로 띄우도록 처리
+		    	// 2. 서블릿 요청을 두번한다
+		    	//		> 첫번째로 아이디체크
+		    	request.setAttribute("message", "아이디나 암호를 확인해주세요.");
+		    	out.print("0");
+		    }
+			return;
 		case "logout":
+			session.setAttribute("mid", null);
+			session.setAttribute("irum", null);
+			session.invalidate();
 			
-			break;
+			page = "index";
+			dispatcher = request.getRequestDispatcher(page + ".jsp");
+			dispatcher.forward(request, response);
+			return;
 		case "join":
 			result = dao.insert(request);
 			
@@ -107,7 +137,7 @@ public class JMemberServlet extends HttpServlet {
 		}
 		
 		// 최종 페이지 조립하고 forward
-		RequestDispatcher dispatcher = request.getRequestDispatcher(url01 + page + ".jsp");
+		dispatcher = request.getRequestDispatcher(url01 + page + ".jsp");
 		dispatcher.forward(request, response);
 	}
 
