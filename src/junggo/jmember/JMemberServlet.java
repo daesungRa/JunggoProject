@@ -120,13 +120,21 @@ public class JMemberServlet extends HttpServlet {
 			}
 	
 			return;
-		case "findId": // url02 로 별도처리
-	
-			break;
-		case "findPwd": // url02 로 별도처리
-			
-			break;
 		case "view":
+			// 조회성공시 페이지 로드, 세션아이디가 없으면 에러코드 0, vo 가 null 이면 에러코드 1
+			System.out.println("세션 등록 아이디: " + (String)session.getAttribute("mid"));
+			if ((String)session.getAttribute("mid") != null && !((String)session.getAttribute("mid")).equals("")) {
+				vo = dao.select((String)session.getAttribute("mid"));
+				if (vo != null) { // 조회된 정보가 있다면 request 객체에 set 한다
+					request.setAttribute("vo", vo);
+				} else {
+					out.print("1");
+					return;
+				}
+			} else {
+				out.print("0");
+				return;
+			}
 			
 			break;
 		case "modify":

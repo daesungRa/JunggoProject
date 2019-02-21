@@ -53,7 +53,7 @@
 				<div class='col-lg-3 my-intro-grid align-items-center'>소개글입니다</div>
 				<div class='col-lg-2 my-intro-grid'></div>
 			</div>
-		</div> -->
+		</div>
 		<hr />
 		<!-- 게시판 로드 -->
 		<div class='container my-board' id='content'>

@@ -213,4 +213,37 @@ public class JMemberDao {
 		  
 		  return vo;
 	}
+	
+	// 회원정보 조회
+	public JMemberVo select (String mid) {
+		JMemberVo vo = null;
+		String sql = "select mid, irum, phone, email, postal, address, addressAdd, photo, photoOri, to_char(mDate, 'YY.MM.DD/HH24:MI:SS') mDate from jmember where mid = ?";
+		
+		try {
+			this.conn = new DBConnect().getConn();	
+			ps = this.conn.prepareStatement(sql);
+			ps.setString(1, mid);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				vo = new JMemberVo();
+				vo.setMid(rs.getString("mid"));
+				vo.setIrum(rs.getString("irum"));
+				vo.setPhone(rs.getString("phone"));
+				vo.setEmail(rs.getString("email"));
+				vo.setPostal(rs.getString("postal"));
+				vo.setAddress(rs.getString("address"));
+				vo.setAddressAdd(rs.getString("addressAdd"));
+				vo.setPhoto(rs.getString("photo"));
+				vo.setPhotoOri(rs.getString("photoOri"));
+				vo.setmDate(rs.getString("mDate"));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			closeSet();
+		}
+		
+		return vo;
+	}
 }

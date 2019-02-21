@@ -44,7 +44,7 @@
 					</a>
 					<ul class='dropdown-menu dropdown-menu-right animate slideIn'>
 						<li><a class='dropdown-item' id='logoutAnc' href='#logout'>로그아웃</a></li>                   <!-- 가현 -->
-
+						<li><a class='dropdown-item' id='loadMemberView' href='#logout'>회원정보</a></li>
 					 <% } %> 
 					</ul>
 				</div>
