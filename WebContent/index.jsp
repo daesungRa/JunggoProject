@@ -36,7 +36,7 @@
 	<jsp:include page="/views/component/top.html"></jsp:include>
 	
 	<!-- navbar -->
-	<jsp:include page="/views/component/navBar.html"></jsp:include>
+	<jsp:include page="/views/component/navBar.jsp"></jsp:include>
 	
 	<!-- header -->
 	<jsp:include page="/views/component/header.html"></jsp:include>

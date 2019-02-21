@@ -82,6 +82,56 @@ function funcLoginAction () {
 			});
 		}
 	});
+	
+	// 아이디 찾기 페이지 로드
+	$('#findIdAnc').click(function () {
+		$.ajax({
+			type: 'get',
+			url: '/junggo/views/jmember/findId.jsp',
+			dataType: 'html',
+			success: function (html, status) {
+				modalContent.setAttribute('style', 'height: 60%; margin: 14% auto;');
+				innerModalContent.setAttribute('style', 'position: absolute; width: 96%; height: 90%; top: -10px;');
+				
+				innerModalContent.innerHTML = html;
+				modalWindow.style.display = 'block';
+			}
+		})
+	});
+
+	// 비밀번호 찾기 페이지 로드
+	$('#findPwdAnc').click(function () {
+		$.ajax({
+			type: 'get',
+			url: '/junggo/views/jmember/findPwd.jsp',
+			dataType: 'html',
+			success: function (html, status) {
+				modalContent.setAttribute('style', 'height: 60%; margin: 14% auto;');
+				innerModalContent.setAttribute('style', 'position: absolute; width: 96%; height: 90%; top: -10px;');
+				
+				innerModalContent.innerHTML = html;
+				modalWindow.style.display = 'block';
+			}
+		})
+	});
+	
+	// 회원가입 페이지 로드
+	$('#joinjoinAnc').click(function () {
+		$.ajax({
+			type: 'get',
+			url: '/junggo/views/jmember/jmember_join.jsp',
+			dataType: 'html',
+			success: function (html, status) {
+				modalContent.setAttribute('style', 'height: 82%; margin: 7% auto;');
+				innerModalContent.setAttribute('style', 'position: absolute; width: 97%; height: 94%; top: 0;');
+				
+				innerModalContent.innerHTML = html;
+				modalWindow.style.display = 'block';
+				
+				funcJoinAction();
+			}
+		})
+	});
 }
 
 //입력 내용 체크 후 조인 실행 함수

@@ -24,9 +24,9 @@
 					</form>
 				</div>
 			</div>
-			<a href='#'>아이디 찾기</a>&nbsp;&nbsp;
-			<a href='#'>비밀번호 찾기</a>&nbsp;&nbsp;
-			<a href='#'>회원가입</a>
+			<a href='#' class="pull-right forget" id="findIdAnc" href='#findIdAnc'>아이디 찾기</a>&nbsp;&nbsp;
+			<a href='#' class="pull-right forget" id="findPwdAnc" href='#findPwdAnc'>비밀번호 찾기</a>&nbsp;&nbsp;
+			<a href='#' class="pull-right forget" id="joinjoinAnc" href='#findPwdAnc'>회원가입</a>
 			<p/>
 		</div>
 	</div>

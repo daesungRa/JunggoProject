@@ -47,6 +47,7 @@ $(function () {
 			}
 		})
 	});
+	
 	// 조인 모달 창 불러오기
 	// 이후 funcJoinAction 함수 실행
 	$('#joinAnc').click(function () {
@@ -64,6 +65,11 @@ $(function () {
 				funcJoinAction();
 			}
 		})
+	});
+	
+	$('#logoutAnc').click(function(){
+		alert("로그아웃되었습니다.");
+		location.href ='logout.mb';
 	});
 	
 	// post 방식으로 서블릿 컨테이너에 파라미터와 함께 요청해야 함
