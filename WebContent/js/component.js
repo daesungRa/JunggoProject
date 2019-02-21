@@ -1,5 +1,5 @@
 /*
- * 작성자: 라대성
+ * 작성자: 라대성, 김가현
  * 작성일: 190216
  * 기능: 화면을 구성하는 top, navBar, loginForm, joinForm, header, footer, modal 에 대한 기본 스크립트 모음
  */
@@ -95,6 +95,8 @@ function funcLoginAction () {
 				
 				innerModalContent.innerHTML = html;
 				modalWindow.style.display = 'block';
+				
+				funcFindId();
 			}
 		})
 	});
@@ -111,6 +113,8 @@ function funcLoginAction () {
 				
 				innerModalContent.innerHTML = html;
 				modalWindow.style.display = 'block';
+				
+				funcFindPwd();
 			}
 		})
 	});
@@ -380,7 +384,7 @@ function funcJoinSubmit (frm) {
 						funcLoginAction();
 					}
 				})
-			} else if (data == '0') { // 회원가입 실패, 페이지로 이동 없음
+			} else if (data == '0') { // 회원가입 실패, 페이지 이동 없음
 				alert('회원가입에 실패했습니다. 입력 정보를 다시 확인하세요.');
 				frm.mid.focus();
 				frm.mid.select();

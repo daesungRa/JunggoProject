@@ -172,9 +172,13 @@ public class JMemberDao {
 	    		  
 			  }
 		  
-	  }catch(Exception ex) {
-		  ex.printStackTrace();
-	  }return vo;
+		  } catch (Exception ex) {
+			  ex.printStackTrace();
+		  } finally {
+			  closeSet();
+		  }
+		  
+		  return vo;
 	}
 	
 	// 비번 찾기
@@ -201,8 +205,12 @@ public class JMemberDao {
 
 			  }
 		  
-	  }catch(Exception ex) {
-		  ex.printStackTrace();
-	  }return vo;
+		  } catch (Exception ex) {
+			  ex.printStackTrace();
+		  } finally {
+			  closeSet();
+		  }
+		  
+		  return vo;
 	}
 }

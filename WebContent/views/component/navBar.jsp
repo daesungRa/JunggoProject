@@ -30,7 +30,7 @@
 			<div class='navbar navbar-nav navbar-right'>
 				<div class='dropdown'>
 					<% if(session.getAttribute("mid") == null){ %>
-					<a class='dropdown-toggle' data-toggle='dropdown' role='button' href='#' style='color: #343434;'>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' href='#' style='color: #343434; text-decoration: none;'>
 						접속<span class='caret'></span>
 					</a>
 					<ul class='dropdown-menu dropdown-menu-right animate slideIn'>
@@ -39,9 +39,8 @@
 					</ul>
 					
 					<% }else{ %> 
-					  <b><%= session.getAttribute("mid") %></b>님, 환영합니다.
-					<a class='dropdown-toggle' data-toggle='dropdown' role='button' href='#' style='color: #343434;'>
-						접속<span class='caret'></span>
+					<a class='dropdown-toggle' data-toggle='dropdown' role='button' href='#' style='color: #343434; text-decoration: none;'>
+						<b><%= session.getAttribute("mid") %></b>님, 환영합니다.<span class='caret'></span>
 					</a>
 					<ul class='dropdown-menu dropdown-menu-right animate slideIn'>
 						<li><a class='dropdown-item' id='logoutAnc' href='#logout'>로그아웃</a></li>                   <!-- 가현 -->
