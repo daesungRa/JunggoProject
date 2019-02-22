@@ -63,7 +63,7 @@
 						String dir = "";
 						String fileName = "";
 						if (((JMemberVo)request.getAttribute("vo")).getPhoto() != null) { // 전달된 vo 객체에 photo 가 존재한다면(없다면 빈 문자열 세팅)
-							dir = "D:/1806_Ra/git/JunggoProject/WebContent/img/jmember/"; // 파일이 저장된 디렉토리
+							dir = "D://git/JunggoProject/WebContent/img/jmember/"; // 파일이 저장된 디렉토리
 							fileName = ((JMemberVo) request.getAttribute("vo")).getPhoto();
 							fileName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length()); // 파일명만 따오기
 						}
@@ -103,6 +103,7 @@
 			<c:choose>
 				<c:when test="${not empty vo.photo }">
 					<img id='image' src='${vo.photo }' width='150px' height='200px' /><br/>
+					${vo.photo }<br/>
 					<p>이미지 미리보기(${vo.photoOri })</p>
 				</c:when>
 				<c:otherwise>

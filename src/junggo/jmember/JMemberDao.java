@@ -25,7 +25,7 @@ public class JMemberDao {
 	// 파일업로드를 위한 환경설정
 	private int size = 1024 * 1024 * 10; // 10mb
 	private String encode = "utf-8";
-	private String saveDir = "D:/1806_Ra/git/JunggoProject/WebContent/img/jmember/"; // 실제 저장 경로
+	private String saveDir = "D://git/JunggoProject/WebContent/img/jmember/"; // 실제 저장 경로
 	private String oriFileName = "";
 	private String sysFileName = "";
 	
@@ -108,8 +108,7 @@ public class JMemberDao {
 			
 			// 비밀번호 해싱 to 문자열
 			try {
-				GetHash getHash = new GetHash();
-				hashedPwd = getHash.getHash(multi.getParameter("pwd"));
+				hashedPwd = GetHash.getHash(multi.getParameter("pwd"));
 			} catch (NoSuchAlgorithmException nae) {
 				nae.printStackTrace();
 			}
@@ -121,6 +120,7 @@ public class JMemberDao {
 			ps.setString(1, multi.getParameter("mid"));
 			ps.setString(2, multi.getParameter("irum"));
 			if (!hashedPwd.equals("")) {
+				System.out.println("[join] hashedPwd : " + hashedPwd);
 				ps.setString(3, hashedPwd);				
 			} else {
 				ps.setString(3, multi.getParameter("pwd")); // 해시처리가 안됐다면, 그냥 비번 투입
@@ -170,6 +170,7 @@ public class JMemberDao {
 		String sql = " update jmember set irum = ?, phone = ?, email = ?, postal = ?, "
 						+ "	address = ?, addressadd = ?, photo = ?, photoOri = ? "
 						+ "	where mid = ? and pwd = ? ";
+		String hashedPwd = ""; // 해시처리되면 그것을, 아니면 원래 비번 저장됨
 		
 		try {
 			this.conn = new DBConnect().getConn();
@@ -211,6 +212,13 @@ public class JMemberDao {
 				System.out.println("[수정]sys: " + sysFileName);
 			}
 			
+			// 비밀번호 해싱 to 문자열
+			try {
+				hashedPwd = GetHash.getHash(multi.getParameter("pwd"));
+			} catch (NoSuchAlgorithmException nae) {
+				nae.printStackTrace();
+			}
+			
 			// db 로직 처리
 			this.conn.setAutoCommit(false);
 			ps = this.conn.prepareStatement(sql);
@@ -231,14 +239,19 @@ public class JMemberDao {
 			}
 			if (sysFileName != null && !sysFileName.equals("")) {
 				System.out.println("사진 저장!");
-				ps.setString(7, multi.getParameter("photo"));
-				ps.setString(8, multi.getParameter("photoOri"));
+				ps.setString(7, "/junggo/img/jmember/" + sysFileName);
+				ps.setString(8, oriFileName);
 			} else {
 				ps.setString(7, multi.getParameter(""));
 				ps.setString(8, multi.getParameter(""));
 			}
 			ps.setString(9, mid);
-			ps.setString(10, multi.getParameter("pwd"));
+			if (!hashedPwd.equals("")) {
+				System.out.println("[join] hashedPwd : " + hashedPwd);
+				ps.setString(10, hashedPwd);
+			} else {
+				ps.setString(10, multi.getParameter("pwd")); // 해시처리가 안됐다면, 그냥 비번 투입
+			}
 			int i = ps.executeUpdate();
 			
 			if (i > 0) {
@@ -359,10 +372,19 @@ public class JMemberDao {
 	// 회원정보 삭제
 	public boolean delete (HttpServletRequest request) {
 		boolean result = false;
+		String hashedPwd = "";
+		// 디비에서 파일정보 가져온 후, 계정삭제가 성공하면 실제 경로에서 파일도 삭제한다
+		
 		String sql = " delete from jmember where mid = ? and pwd = ? ";
 		String sessionMid = (String) request.getSession().getAttribute("mid");
-		String inputPwd = (String) request.getParameter("pwd");
-		System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", " + inputPwd);
+		String inputPwd = (String) request.getParameter("pwd"); // 기본 비번으로 설정, 해싱되면 그것으로 변경됨
+		
+		// 비밀번호 해싱 to 문자열
+		try {
+			hashedPwd = GetHash.getHash(request.getParameter("pwd"));
+		} catch (NoSuchAlgorithmException nae) {
+			nae.printStackTrace();
+		}
 		
 		try {
 			this.conn = new DBConnect().getConn();
@@ -370,7 +392,13 @@ public class JMemberDao {
 			
 			ps = this.conn.prepareStatement(sql);
 			ps.setString(1, sessionMid);
-			ps.setString(2, inputPwd);
+			if (!hashedPwd.equals("")) {
+				System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", " + hashedPwd);
+				ps.setString(2, hashedPwd);
+			} else {
+				System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", 비번은 보호");
+				ps.setString(2, inputPwd);
+			}
 			int i = ps.executeUpdate();
 			
 			if (i > 0) {

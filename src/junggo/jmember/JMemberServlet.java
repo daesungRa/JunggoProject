@@ -72,15 +72,14 @@ public class JMemberServlet extends HttpServlet {
 		    
 		    // 비밀번호 해싱 to 문자열
  			try {
- 				GetHash getHash = new GetHash();
- 				hashedPwd = getHash.getHash(request.getParameter("pwd"));
+ 				hashedPwd = GetHash.getHash(request.getParameter("pwd"));
  			} catch (NoSuchAlgorithmException nae) {
  				nae.printStackTrace();
  			}
  			
  			// 결과 출력
 		    System.out.println("id: " + mid);
-		    System.out.println("hashedPwd: " + hashedPwd);
+		    System.out.println("[login] hashedPwd : " + hashedPwd);
 
 		    vo = new JMemberVo();
 		    vo.setMid(mid);
@@ -171,7 +170,6 @@ public class JMemberServlet extends HttpServlet {
 				out.print("1");
 			} else {
 				System.out.println("회원정보 삭제 실패");
-				session.invalidate(); // 실패해도 세션 만료
 				out.print("0");
 			}
 			

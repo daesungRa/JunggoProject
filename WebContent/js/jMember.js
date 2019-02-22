@@ -146,6 +146,11 @@ function funcForgetPwd(){
 function funcMemberView () {
 	$('#showModifyPage').click(function () { // 회원정보 수정 페이지 로드
 		alert('회원정보 수정 페이지입니다.');
+		/*swal({
+		  title: "회원정보 수정",
+		  text: "회원정보 수정 페이지입니다",
+		  icon: "success",
+		});*/
 		$('#infoTitle').text('회원정보 수정');
 		// $('#mid').removeAttr('readonly');
 		$('#midChkResult').text('아이디는 수정 불가합니다.');
@@ -167,20 +172,25 @@ function funcMemberView () {
 	});
 	$('#btnMemberDelete').click(function () { // 회원탈퇴. 비번 확인 필수
 		var inputPwd = prompt('회원탈퇴를 위해 가입 시 등록한 비밀번호를 입력하십시오.');
-		var result = confirm('정말 탈퇴하시겠습니까? 관련된 모든 정보는 삭제됩니다.');
-		if (result) {
-			$.post('delete.mb', {pwd: inputPwd}, 
-			function (data, status){
-				if (data == '1') {
-					alert('회원탈퇴가 완료되었습니다.');
-					location.href = '/junggo/index.jsp'; // 탈퇴시 관련 파일도 삭제되도록
-				} else if (data == '0') {
-					alert('회원탈퇴에 실패했습니다. 입력 정보를 다시 확인해주세요.');
-					location.href = '/junggo/index.jsp';
-				}
-			});
+		if (inputPwd != null && inputPwd != '') {
+			var result = confirm('정말 탈퇴하시겠습니까? 관련된 모든 정보는 삭제됩니다.');
+			if (result) {
+				$.post('delete.mb', {pwd: inputPwd}, 
+				function (data, status){
+					if (data == '1') {
+						alert('회원탈퇴가 완료되었습니다.');
+						location.href = '/junggo/index.jsp'; // 탈퇴시 관련 파일도 삭제되도록
+					} else if (data == '0') {
+						alert('회원탈퇴에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+						// location.href = '/junggo/index.jsp';
+					}
+					return;
+				});
+			} else {
+				alert('회원탈퇴가 취소되었습니다.');	
+			}
 		} else {
-			
+			alert('회원탈퇴가 취소되었습니다.');	
 		}
 	});
 }
@@ -223,8 +233,12 @@ function funcModifyAction () {
 	// btn submit
 	joinFrm.btnModifySubmit.onclick = function () {
 		var inputPwd = prompt('회원정보 수정을 위해 가입 시 등록한 비밀번호를 입력하십시오.');
-		$('#pwd01').val(inputPwd); // 입력받은 비밀번호를 폼 태그 내에 세팅
-		funcModifySubmit(joinFrm);
+		if (inputPwd != null && inputPwd != '') {
+			$('#pwd01').val(inputPwd); // 입력받은 비밀번호를 폼 태그 내에 세팅
+			funcModifySubmit(joinFrm);
+		} else {
+			alert('회원정보 수정 취소');
+		}
 	}
 	// cancel
 	joinFrm.btnModifyCancel.onclick = function () {
