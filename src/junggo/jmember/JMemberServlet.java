@@ -138,14 +138,35 @@ public class JMemberServlet extends HttpServlet {
 			
 			break;
 		case "modify":
+			result = dao.modify(request);
 			
-			break;
+			if (result) {
+				System.out.println("회원정보 수정 성공");
+				out.print("1");
+			} else {
+				System.out.println("회원정보 수정 실패");
+				out.print("0");
+			}
+			
+			return; // 페이지 이동은 회원가입 결과에 따라 스크립트에서 처리
 		case "delete": // 별도처리
+			result = dao.delete(request);
 			
-			break;
+			if (result) {
+				System.out.println("회원정보 삭제 성공");
+				session.invalidate();
+				out.print("1");
+			} else {
+				System.out.println("회원정보 삭제 실패");
+				session.invalidate(); // 실패해도 세션 만료
+				out.print("0");
+			}
+			
+			return;
 		}
 		
 		// 최종 페이지 조립하고 forward
+		System.out.println("서블릿에서 최종 요청 페이지: " + url01 + page + ".jsp");
 		dispatcher = request.getRequestDispatcher(url01 + page + ".jsp");
 		dispatcher.forward(request, response);
 	}

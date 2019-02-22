@@ -1,3 +1,4 @@
+<%@page import="junggo.jmember.JMemberVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
@@ -28,12 +29,12 @@
 						<div id='midChkResult' style='color: #0000ff; width: 40%;'></div>
 					</div>
 				</div>
-				<!-- <div class='form-group'>
-					<input class='form-control' type='password' id='pwd01' name='pwd' maxlength='30' placeholder='비밀번호 입력 (필수)' style='width: 60%;' />
-					<input class='form-control' type='password' id='pwd02' name='pwdChk' maxlength='30' placeholder='비밀번호 확인 (필수)' style='width: 60%;' />
+				<div class='form-group'>
+					<input class='form-control' type='password' id='pwd01' name='pwd' maxlength='30' value='' placeholder='비밀번호 입력 (필수)' style='display: none; width: 60%;' />
+					<input class='form-control' type='password' id='pwd02' name='pwdChk' maxlength='30' placeholder='비밀번호 확인 (필수)' style='display: none; width: 60%;' />
 					<input type='hidden' id='pwdChk' value='unChecked' readonly/>
 					<div id='pwdChkResult' style='color: #ff0000;'></div>
-				</div> -->
+				</div>
 				<div class='form-group'>
 					<input class='form-control' type='text' id='irum' name='irum' value='${vo.irum }' placeholder='이름 입력' readonly="readonly" />
 					<input type='hidden' id='irumChk' value='unChecked' readonly/>
@@ -58,11 +59,21 @@
 						<input class='form-control' type='text' id='addressAdd' name='addressAdd' value='${vo.addressAdd }' placeholder='추가 주소 입력' readonly="readonly" />
 				</div>
 				<div class='form-group'>
-					<input type='file' id='photo' name='photo' value='photo' multiple="multiple" required="required" style='display: none;' /><br/>
+					<%
+						String dir = "";
+						String fileName = "";
+						if (((JMemberVo)request.getAttribute("vo")).getPhoto() != null) { // 전달된 vo 객체에 photo 가 존재한다면(없다면 빈 문자열 세팅)
+							dir = "D:/1806_Ra/git/JunggoProject/WebContent/img/jmember/"; // 파일이 저장된 디렉토리
+							fileName = ((JMemberVo) request.getAttribute("vo")).getPhoto();
+							fileName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length()); // 파일명만 따오기
+						}
+					%>
+					<script>alert('<%=dir + fileName %>');</script>
+					<input type='file' id='photo' name='photo' value='<%=dir + fileName %>' required="required" style='display: none;' /><br/>
 				</div>	
 				<div class='form-group'>
-					<input class='btn btn-primary' type='button' id='btnJoinSubmit' name='btnJoinSubmit' value='제 출' style='display: none;' />
-					<input class='btn btn-primary' type='button' id='btnCancel' name='btnCancel' value='초기화' style='display: none;' />
+					<input class='btn btn-primary' type='button' id='btnModifySubmit' name='btnJoinSubmit' value='제 출' style='display: none;' />
+					<input class='btn btn-primary' type='button' id='btnModifyCancel' name='btnCancel' value='취 소' style='display: none;' />
 				</div>
 				<div class='form-group'>
 					<input class='btn btn-primary' type='button' id='showModifyPage' name='btnJoinSubmit' value='정보 수정' />

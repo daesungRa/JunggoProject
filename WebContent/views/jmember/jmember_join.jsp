@@ -55,7 +55,7 @@
 						<input class='form-control' type='text' id='addressAdd' name='addressAdd' value='' placeholder='추가 주소 입력' />
 				</div>
 				<div class='form-group'>
-					<input type='file' id='photo' name='photo' value='photo' multiple="multiple" required="required"/><br/>
+					<input type='file' id='photo' name='photo' value='photo' required="required"/><br/>
 				</div>
 				<div class='form-group'>
 					<input class='btn btn-primary' type='button' id='btnJoinSubmit' name='btnJoinSubmit' value='제 출' />

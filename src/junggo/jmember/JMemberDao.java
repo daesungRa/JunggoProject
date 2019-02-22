@@ -1,5 +1,6 @@
 package junggo.jmember;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -148,6 +149,99 @@ public class JMemberDao {
 		return result;
 	}
 	
+	// 회원정보 수정
+	public boolean modify (HttpServletRequest request) {
+		boolean result = false;
+		String sql = " update jmember set irum = ?, phone = ?, email = ?, postal = ?, "
+						+ "	address = ?, addressadd = ?, photo = ?, photoOri = ? "
+						+ "	where mid = ? and pwd = ? ";
+		
+		try {
+			this.conn = new DBConnect().getConn();
+			String mid = (String) request.getSession().getAttribute("mid"); // 디비 로직 처리를 위한 세션 아이디 get
+			
+			// 파일업로드
+			MultipartRequest multi = new MultipartRequest(request, saveDir, size, encode, new DefaultFileRenamePolicy());
+			Enumeration<String> e = multi.getFileNames();
+			while (e.hasMoreElements()) {
+				// 새로 업로드된 파일이 있다면,
+				// db 로부터 기존 파일명을 가져와 실제 디렉토리에서 삭제한 후 새로운 것으로 다시 저장한다
+				String sqlGetSysFileName = " select photo from jmember where mid = ? ";
+				String delFileName = ""; // 실제 디렉토리에서 삭제할 파일경로
+				ps = this.conn.prepareStatement(sqlGetSysFileName);
+				System.out.println("세션아이디: " + mid);
+				ps.setString(1, mid);
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					// photo 경로를 얻어와 실제 드라이브 저장경로 조립
+					delFileName = rs.getString("photo");
+					delFileName = saveDir + delFileName.substring(delFileName.lastIndexOf("/") + 1, delFileName.length());
+					// 해당 경로에 존재하는 파일 삭제
+					File delFilePath = new File(delFileName);
+					if (delFilePath.exists()) { // 존재한다면 삭제
+						delFilePath.delete();
+					} else {
+						System.out.println("해당 파일이 존재하지 않습니다.");
+					}
+				}
+				// 사용 후 자원해제
+				rs.close();
+				ps.close();
+				
+				// 새롭게 요청받은 파일정보를 얻어온다
+				String tagName = (String) e.nextElement();
+				oriFileName = multi.getOriginalFileName(tagName);
+				sysFileName = multi.getFilesystemName(tagName);
+				System.out.println("[수정]ori: " + oriFileName);
+				System.out.println("[수정]sys: " + sysFileName);
+			}
+			
+			// db 로직 처리
+			this.conn.setAutoCommit(false);
+			ps = this.conn.prepareStatement(sql);
+			ps.setString(1, multi.getParameter("irum"));
+			ps.setString(2, multi.getParameter("phone"));
+			ps.setString(3, multi.getParameter("email"));
+			if (multi.getParameter("postal") != null && !multi.getParameter("postal").equals("")) {
+				ps.setString(4, multi.getParameter("postal"));
+				ps.setString(5, multi.getParameter("address"));
+			} else {
+				ps.setString(4, multi.getParameter(""));
+				ps.setString(5, multi.getParameter(""));
+			}
+			if (multi.getParameter("addressAdd") != null && !multi.getParameter("addressAdd").equals("")) {
+				ps.setString(6, multi.getParameter("addressAdd"));
+			} else {
+				ps.setString(6, multi.getParameter(""));
+			}
+			if (sysFileName != null && !sysFileName.equals("")) {
+				System.out.println("사진 저장!");
+				ps.setString(7, multi.getParameter("photo"));
+				ps.setString(8, multi.getParameter("photoOri"));
+			} else {
+				ps.setString(7, multi.getParameter(""));
+				ps.setString(8, multi.getParameter(""));
+			}
+			ps.setString(9, mid);
+			ps.setString(10, multi.getParameter("pwd"));
+			int i = ps.executeUpdate();
+			
+			if (i > 0) {
+				result = true;
+				this.conn.commit();
+			}
+		} catch (Exception ex) {
+			try {
+				this.conn.rollback();
+			} catch (Exception ex2) { }
+			ex.printStackTrace();
+		} finally {
+			closeSet();
+		}
+		
+		return result;
+	}
+	
 	// 아이디 찾기
 	  public JMemberVo findId(String irum, String receiver) {
 		  JMemberVo vo = null;
@@ -245,5 +339,38 @@ public class JMemberDao {
 		}
 		
 		return vo;
+	}
+	
+	// 회원정보 삭제
+	public boolean delete (HttpServletRequest request) {
+		boolean result = false;
+		String sql = " delete from jmember where mid = ? and pwd = ? ";
+		String sessionMid = (String) request.getSession().getAttribute("mid");
+		String inputPwd = (String) request.getParameter("pwd");
+		System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", " + inputPwd);
+		
+		try {
+			this.conn = new DBConnect().getConn();
+			conn.setAutoCommit(false);
+			
+			ps = this.conn.prepareStatement(sql);
+			ps.setString(1, sessionMid);
+			ps.setString(2, inputPwd);
+			int i = ps.executeUpdate();
+			
+			if (i > 0) {
+				result = true;
+				conn.commit();
+			}
+		} catch (Exception ex) {
+			try {
+				conn.rollback();
+			} catch (Exception ex2) { ex2.printStackTrace(); }
+			ex.printStackTrace();
+		} finally {
+			closeSet();
+		}
+		
+		return result;
 	}
 }

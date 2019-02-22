@@ -181,7 +181,6 @@ function funcJoinAction () {
 	}
 	// cancel
 	joinFrm.btnCancel.onclick = function () {
-		window.location.reload();
 		$('#joinAnc').trigger('click');
 	}
 }
