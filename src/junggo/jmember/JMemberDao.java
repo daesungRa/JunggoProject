@@ -1,6 +1,7 @@
 package junggo.jmember;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import junggo.component.DBConnect;
+import junggo.component.GetHash;
 
 public class JMemberDao {
 
@@ -90,6 +92,7 @@ public class JMemberDao {
 		boolean result = false;
 		String sql = " insert into jmember (mid, irum, pwd, phone, email, postal, address, addressAdd, photo, photoOri, mDate)"
 						+ "	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate) ";
+		String hashedPwd = ""; // 해시처리되면 그것을, 아니면 원래 비번 저장됨
 		
 		try {
 			// 파일업로드
@@ -103,13 +106,25 @@ public class JMemberDao {
 				System.out.println("sys: " + sysFileName);
 			}
 			
+			// 비밀번호 해싱 to 문자열
+			try {
+				GetHash getHash = new GetHash();
+				hashedPwd = getHash.getHash(multi.getParameter("pwd"));
+			} catch (NoSuchAlgorithmException nae) {
+				nae.printStackTrace();
+			}
+			
 			// db 로직 처리
 			this.conn = new DBConnect().getConn();
 			this.conn.setAutoCommit(false);
 			ps = this.conn.prepareStatement(sql);
 			ps.setString(1, multi.getParameter("mid"));
 			ps.setString(2, multi.getParameter("irum"));
-			ps.setString(3, multi.getParameter("pwd"));
+			if (!hashedPwd.equals("")) {
+				ps.setString(3, hashedPwd);				
+			} else {
+				ps.setString(3, multi.getParameter("pwd")); // 해시처리가 안됐다면, 그냥 비번 투입
+			}
 			ps.setString(4, multi.getParameter("phone"));
 			ps.setString(5, multi.getParameter("email"));
 			if (multi.getParameter("postal") != null && !multi.getParameter("postal").equals("")) {

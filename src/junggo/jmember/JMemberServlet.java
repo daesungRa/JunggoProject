@@ -3,6 +3,7 @@ package junggo.jmember;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import junggo.component.GetHash;
 
 /**
  * Servlet implementation class memberServlet
@@ -65,13 +68,23 @@ public class JMemberServlet extends HttpServlet {
 		case "login":
 			//request 객체 << form 정보들이 담겨
 			String mid = request.getParameter("mid");
-		    String pwd = request.getParameter("pwd");
+		    String hashedPwd = request.getParameter("pwd"); // 그냥 비번 투입했다가 해시처리 후 해시결과 투입
+		    
+		    // 비밀번호 해싱 to 문자열
+ 			try {
+ 				GetHash getHash = new GetHash();
+ 				hashedPwd = getHash.getHash(request.getParameter("pwd"));
+ 			} catch (NoSuchAlgorithmException nae) {
+ 				nae.printStackTrace();
+ 			}
+ 			
+ 			// 결과 출력
 		    System.out.println("id: " + mid);
-		    System.out.println("pwd: " + pwd);
+		    System.out.println("hashedPwd: " + hashedPwd);
 
 		    vo = new JMemberVo();
 		    vo.setMid(mid);
-		    vo.setPwd(pwd);
+		    vo.setPwd(hashedPwd);
 		    
 		    JMemberVo v = dao.login(vo); // 뷰로 반환할 vo 객체
 		    
