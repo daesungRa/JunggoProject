@@ -1,20 +1,159 @@
-<!-- 
-	[ê²Œì‹œê¸€ ìž…ë ¥ íŽ˜ì´ì§€]
-	- jboard.css
-	- jboard.js
-	- index íŽ˜ì´ì§€ì— ë¡œë“œë  ê²ƒì´ë¯€ë¡œ, ê´€ë ¨ ìŠ¤í¬ë¦½íŠ¸ëŠ” index.js ì— ìž‘ì„±í•  ê²ƒ
- -->
-
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page import="java.util.Date"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="EUC-KR">
 <title>Insert title here</title>
+<script>
+// ÀÌ¹ÌÁö ¹Ì¸®º¸±â
+  $(document).ready(function() {
+	 /*
+	  	document.getElementById("pro-image-1").addEventListener('change', readImage, false);
+	 */		
+	    $( ".preview-images-zone" ).sortable();
+	    
+	    /* »çÁø X¹öÆ° Å¬¸¯½Ã ÀÌº¥Æ® Ã³¸® */
+	    $(document).on('click', '.image-cancel', function() {
+	        let no = $(this).data('no');
+	        $(".preview-image.preview-show-"+no).remove();
+	       
+	        $(".file-list-" + no).remove();
+	        
+	    });
+	});
+
+	function insertNumber(obj) { 
+	    obj.value = unNum(obj.value); 
+	} 
+
+	function unNum(str) { 
+	    str = String(str); 
+	    return str.replace(/[^\d]+/g, ''); 
+	}
+
+
+  	var num = 2;
+	var ber = 1;
+	
+	function readImage() {
+	    if (window.File && window.FileList && window.FileReader) {
+	    	
+	    	var files = event.target.files; //FileList object
+	        var output = $(".preview-images-zone");
+
+	        var fileLoad = $(".file-zone");
+	        
+	        var dis = $(".file-list-" + (num-1));
+        	dis.attr("style" ,"display:none;");
+	    
+	        for (let i = 0; i < files.length; i++) {
+	       
+	           	var file = files[i];
+	           	
+	     
+	           	if (!file.type.match('image')) continue;
+	            
+	            var picReader = new window.FileReader();
+	            
+	            picReader.addEventListener('load', function (event) {
+	            	
+	            	var picFile = event.target;
+	               
+	        	                
+	                var fileAppend = 
+	                	'<div class = "file-list-'+ num +'">' +
+							'<input type="file" name = "pro-image-' + num + '" id = "pro-image-'+ num +'" onchange="readImage()" data-no=' + num + ' style = "color : #fff">' +
+						'</div>';
+	             
+					fileLoad.append(fileAppend);
+					
+					
+	                var html =  '<div class="preview-image preview-show-' + ber + '">' +
+	                            	'<div class="image-cancel" data-no="' + ber + '">X</div>' +
+	                            	'<div class="image-zone"><img id="pro-img-' + ber + '" src="' + picFile.result + '"></div>' +
+	                            '</div>';
+
+	                output.append(html);
+	               
+	                num = num + 1;
+	                ber = ber + 1;
+	                
+	            
+	            });
+	            picReader.readAsDataURL(file);
+	        }
+	       
+	        // $("#pro-image").val('');
+	    } else {
+	        console.log('Browser not support');
+	    }
+	}
+
+</script>
 </head>
 <body>
 
+	<div class = "container">
+		<form id = "frm" name = "frm" method = "post" enctype = "multipart/form-data" action = "/junggo/insert.bd">
+			<hr>
+			<h2>°Ô½ÃÆÇ ÀÔ·Â Æû</h2>
+			<hr/>
+			<div class = "form-group">
+				<label>°Ô½Ã¹° µî·ÏÀÏ</label>
+				<output>¡ß<%=new Date().toLocaleString()%>¡ß</output>
+		  	</div>
+		  	<p>
+		  	<label>°Ô½ÃÆÇ Ä«Å×°í¸®</label>
+	  		<select class = "form-control" name = "insertCategory">
+	  			<option value = '1'>°Ô½ÃÆÇ (»ð´Ï´Ù.)</option>
+	  			<option value = '0' selected>°Ô½ÃÆÇ (ÆË´Ï´Ù.)</option>
+	  		</select>
+		  	<p>
+		  	<label>ÆÇ¸Å »óÅÂ</label>
+	  		<select class = "form-control" name = "insertStatus">
+	  			<option value = '0' selected>ÆÇ¸ÅÁß..!</option>
+	  			<option value = '1'>ÆÇ¸Å¿Ï·á..!</option>
+	  			<option value = '2' selected>±¸¸ÅÁß..!</option>
+	  			<option value = '3'>±¸¸Å¿Ï·á..!</option>
+	  		</select>
+	  		
+		  	<p>
+		  	<div class="form-group">
+		    	<label for="inputId">¾ÆÀÌµð</label>
+		   		<input type="text" class="form-control" id="insertId" name = "insertId" value = "${sessionScope.mid}" readonly="readonly"> <!-- session.Scopeid -->
+		 	</div>
+		 	
+		  	<div class="form-group">
+		    	<label for="insertSubject">°Ô½Ã¹° Á¦¸ñ</label>
+		    	<input type="text" class="form-control" id="insertSubject" name = "insertSubject" placeholder="Á¦¸ñÀ» ÀÔ·ÂÇÏ¼¼¿ä." required="required">
+		  	</div>
+		  	
+		  	<div class="form-group">
+		    	<label for="insertPrice">ÆÇ¸Å ±Ý¾×</label>
+		  		<input type="text" class="form-control" id="insertPrice" name = "insertPrice" onkeyup="insertNumber(this)" required="required">
+		  	</div>
+		  	
+		  	<label>°Ô½Ã±Û ÀÛ¼º</label>
+		  	<textarea id = "insertContent" name = "insertContent" class="form-control" rows="5" placeholder = "³»¿ëÀ» ÀÔ·ÂÇÏ¼¼¿ä."></textarea>  
+		  	<!-- ÇØ´ç ÀÌ¹ÌÁö ÆÄÀÏ ¹Ì¸®º¸±â -->
+			<p>
+			
+			<div class="form-group">
+				<div class = "file-zone">
+					<div class = "file-list-1">
+						<input type= 'file' onchange = "readImage()" name = "pro-image-1" id = 'pro-image-1' data-no = '1' style = "color : #fff">
+					</div>
+				</div>	
+			</div>
+			<p>	
+			<div class="preview-images-zone">	
+			</div>
+			<p>
+			<div class = "form-group">
+				<button type="button" class="btn btn-default" onclick='check()' >µî·ÏÇÏ±â</button>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

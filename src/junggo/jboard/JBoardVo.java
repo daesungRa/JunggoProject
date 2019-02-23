@@ -1,6 +1,7 @@
 package junggo.jboard;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JBoardVo {
@@ -19,25 +20,18 @@ public class JBoardVo {
 	int rep;
 	int price;
 	String photo;
+	int category;
 	//0: 판매중, 1: 판매완료, 2:구매중, 3: 구매완료
 	int status;
-	List<String> attFiles;
+	List<String> attFiles = new ArrayList<>();
 	List<String> delFiles;
 	
-	public String toJSON() {
-		return String.format("{"
-				+ "'brd_serial'  : '%s', "
-				+ "'brd_subject' : '%s', "
-				+ "'brd_content' : '%s', "
-				+ "'brd_mdate'   : '%s', "
-				+ "'brd_id       : '%s', "
-				+ "'brd_pwd      : '%s', "
-				+ "'brd_hit      : '%s', "
-				+ "'brd_rep      : '%s', "
-				+ "'brd_price    : '%s', "
-				+ "'brd_photo    : '%s'}", 
-				serial, subject, content, mdate, id, pwd, hit, rep, price, photo).replaceAll("\'", "\"");
-	}
+	//comment
+	String rserial;
+	String mid;
+	String comment;
+	String cdate;
+	String pserial;
 	
 	public JBoardVo() {}
 	
@@ -48,7 +42,9 @@ public class JBoardVo {
 	public void setSerial(String serial) {
 		this.serial = serial;
 	}
-
+	public String getSubject2() {
+		return this.subject;
+	}
 	public String getSubject() {
 		String result = "";
 		if(this.status == 0) {
@@ -68,7 +64,7 @@ public class JBoardVo {
 	}
 
 	public String getContent() {
-		return content.substring(0, content.indexOf("다")+1);
+		return content;
 	}
 
 	public void setContent(String content) {
@@ -129,11 +125,10 @@ public class JBoardVo {
 	public void setDelFiles(List<String> delFiles) {
 		this.delFiles = delFiles;
 	}
-
-	public int getPrice() {
-		return price;
+	public int getPrice2() {
+		return this.price;
 	}
-	public String getStringPrice() {
+	public String getPrice() {
 		DecimalFormat df = new DecimalFormat("#,###");
 		return df.format(this.price)+"원";
 	}
@@ -153,12 +148,10 @@ public class JBoardVo {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-
-	public int getStatus() {
-		
-		return status;
+	public int getStatus2() {
+		return this.status;
 	}
-	public String getStringStatus() {
+	public String getStatus() {
 		String result = "";
 		switch(this.status) {
 		case 0:
@@ -178,9 +171,58 @@ public class JBoardVo {
 		}
 		return result;
 	}
-
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	public int getCategory() {
+		return category;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
+
+	public String getRserial() {
+		return rserial;
+	}
+
+	public void setRserial(String rserial) {
+		this.rserial = rserial;
+	}
+
+	public String getMid() {
+		return mid;
+	}
+
+	public void setMid(String mid) {
+		this.mid = mid;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getCdate() {
+		return cdate;
+	}
+
+	public void setCdate(String cdate) {
+		this.cdate = cdate;
+	}
+
+	public String getPserial() {
+		return pserial;
+	}
+
+	public void setPserial(String pserial) {
+		this.pserial = pserial;
+	}
+	
+	
 	
 }
