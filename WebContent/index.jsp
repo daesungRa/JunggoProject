@@ -15,9 +15,12 @@
 <link rel="stylesheet" href="/junggo/css/jBoard.css" />
 <link rel="stylesheet" href="/junggo/css/jMember.css" />
 <link rel="stylesheet" href="/junggo/css/component.css" />
+<link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css">
 
 <!-- script -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><!-- 제이쿼리 Core -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- 제이쿼리 UI -->
+<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>

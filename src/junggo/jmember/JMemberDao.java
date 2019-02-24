@@ -13,7 +13,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import junggo.component.DBConnect;
-import junggo.component.GetHash;
+import junggo.component.GetHashedData;
 
 public class JMemberDao {
 
@@ -39,29 +39,54 @@ public class JMemberDao {
 	}
 	
 	public JMemberVo login(JMemberVo vo) {  //로그인
-		JMemberVo v = null;
-		String sql = "select * from jmember where mid =? and pwd = ? " ;
+		JMemberVo v = null; // 반환할 vo 객체
+		String saltData = "";
+		String hashedPwd = "";
+		String sql = " select saltData from jmember_salt where mid = ? " ;
 		
 	    try{
 	    	conn = new DBConnect().getConn();
+	    	
+	    	// 소금값 얻어온 후 비번 조립
+	    	ps = conn.prepareStatement(sql);
+	    	ps.setString(1, vo.getMid());
+	    	rs = ps.executeQuery();
+	    	
+	    	if (rs.next()) {
+	    		saltData = rs.getString("saltData"); // 소금값 얻어오기
+	    		if (!saltData.equals("")) { // 소금값 있다면 해시 비밀번호 생성
+	    			hashedPwd = GetHashedData.generateHashedString(saltData + vo.getPwd());
+	    			System.out.println("[login] 생성된 소금값, 해시 비번 : " + saltData + ", " + hashedPwd);
+	    		}
+	    	}
+	    	
+	    	// 사용완료자원 close 처리
+	    	rs.close();
+	    	ps.close();
+	    	
+	    	// 아이디, 비번으로 회원정보 조회
+	    	sql = " select * from jmember where mid =? and pwd = ? " ;
 			ps = conn.prepareStatement(sql);  //import해줘야함
 			ps.setString(1, vo.getMid());
-			ps.setString(2, vo.getPwd());
+			if (!hashedPwd.equals("")) { // 해시 비밀번호가 존재한다면 그것을, 아니라면 입력받은 비밀번호 투입
+				ps.setString(2, hashedPwd);
+			} else {
+				ps.setString(2, vo.getPwd());
+			}			
 			rs = ps.executeQuery();
 			
-			if(rs.next()){
+			if(rs.next()) { // 회원정보가 존재한다면, 회원명과 아이디가 세팅된 새로운 vo 객체 만들어 그것을 반환한다
 				v = new JMemberVo();
 				v.setIrum(rs.getString("irum"));
 				v.setMid(rs.getString("mid"));
 			}
-
 	     }catch(Exception ex){
 	    	 ex.printStackTrace();
 	     }finally{
 	    	 closeSet();
 	     }
 	    
-	    return v;	    
+	    return v;
 	}
 	
 	// 입력된 아이디로 아이디 중복체크
@@ -92,6 +117,7 @@ public class JMemberDao {
 		boolean result = false;
 		String sql = " insert into jmember (mid, irum, pwd, phone, email, postal, address, addressAdd, photo, photoOri, mDate)"
 						+ "	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate) ";
+		String saltData = "";
 		String hashedPwd = ""; // 해시처리되면 그것을, 아니면 원래 비번 저장됨
 		
 		try {
@@ -106,11 +132,16 @@ public class JMemberDao {
 				System.out.println("sys: " + sysFileName);
 			}
 			
-			// 비밀번호 해싱 to 문자열
+			/*
+			 * 비밀번호 암호화 처리
+			 */
+			// 소금코드 생성 후
+			// 소금 + 비밀번호 결과를 해싱
 			try {
-				hashedPwd = GetHash.getHash(multi.getParameter("pwd"));
-			} catch (NoSuchAlgorithmException nae) {
-				nae.printStackTrace();
+				saltData = GetHashedData.generateRandomString(); // 소금 코드 생성
+				hashedPwd = GetHashedData.generateHashedString(saltData + multi.getParameter("pwd")); // 비번에 소금치기
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 			
 			// db 로직 처리
@@ -119,9 +150,9 @@ public class JMemberDao {
 			ps = this.conn.prepareStatement(sql);
 			ps.setString(1, multi.getParameter("mid"));
 			ps.setString(2, multi.getParameter("irum"));
-			if (!hashedPwd.equals("")) {
-				System.out.println("[join] hashedPwd : " + hashedPwd);
-				ps.setString(3, hashedPwd);				
+			if (!hashedPwd.equals("")) { // 해시코드문자열이 정상적으로 생성되었다면
+				System.out.println("[join] saltData, hashedPwd : " + saltData + ", " + hashedPwd);
+				ps.setString(3, hashedPwd);
 			} else {
 				ps.setString(3, multi.getParameter("pwd")); // 해시처리가 안됐다면, 그냥 비번 투입
 			}
@@ -150,7 +181,19 @@ public class JMemberDao {
 			
 			if (i > 0) {
 				result = true;
-				this.conn.commit();
+				this.conn.commit(); // jmember 에 저장 성공 시 커밋
+				
+				ps.close(); // 기존 ps close 하고
+				sql = " insert into jmember_salt (mid, saltData)"
+						+ "	values (?, ?) ";
+				ps = conn.prepareStatement(sql); // 소금값을 해당 아이디와 함께 jmember_salt 테이블에 저장. 추후 로그인시 활용
+				ps.setString(1, multi.getParameter("mid"));
+				ps.setString(2, saltData);
+				i = ps.executeUpdate();
+				
+				if (i > 0) {
+					conn.commit();
+				}
 			}
 		} catch (Exception ex) {
 			try {
@@ -167,9 +210,8 @@ public class JMemberDao {
 	// 회원정보 수정
 	public boolean modify (HttpServletRequest request) {
 		boolean result = false;
-		String sql = " update jmember set irum = ?, phone = ?, email = ?, postal = ?, "
-						+ "	address = ?, addressadd = ?, photo = ?, photoOri = ? "
-						+ "	where mid = ? and pwd = ? ";
+		String sql = " select saltData from jmember_salt where mid = ? "; // 소금값 얻어오기 쿼리
+		String saltData = "";
 		String hashedPwd = ""; // 해시처리되면 그것을, 아니면 원래 비번 저장됨
 		
 		try {
@@ -212,12 +254,24 @@ public class JMemberDao {
 				System.out.println("[수정]sys: " + sysFileName);
 			}
 			
-			// 비밀번호 해싱 to 문자열
-			try {
-				hashedPwd = GetHash.getHash(multi.getParameter("pwd"));
-			} catch (NoSuchAlgorithmException nae) {
-				nae.printStackTrace();
+			// db로부터 소금 코드 가져와서 검증할 비번 생성
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, mid); // 소금코드 얻는 쿼리에 세션으로부터 얻어온 mid 세팅
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				saltData = rs.getString("saltData"); // saltData 얻어옴
+				hashedPwd = GetHashedData.generateHashedString(saltData + multi.getParameter("pwd")); // 비번에 소금치기
 			}
+			
+			// close 처리
+			rs.close();
+			ps.close();
+			
+			// 업데이트를 위한 새로운 쿼리 작성
+			sql = " update jmember set irum = ?, phone = ?, email = ?, postal = ?, "
+					+ "	address = ?, addressadd = ?, photo = ?, photoOri = ? "
+					+ "	where mid = ? and pwd = ? ";
 			
 			// db 로직 처리
 			this.conn.setAutoCommit(false);
@@ -247,7 +301,7 @@ public class JMemberDao {
 			}
 			ps.setString(9, mid);
 			if (!hashedPwd.equals("")) {
-				System.out.println("[join] hashedPwd : " + hashedPwd);
+				System.out.println("[modify] saltData, hashedPwd : " + saltData + ", " + hashedPwd);
 				ps.setString(10, hashedPwd);
 			} else {
 				ps.setString(10, multi.getParameter("pwd")); // 해시처리가 안됐다면, 그냥 비번 투입
@@ -372,31 +426,56 @@ public class JMemberDao {
 	// 회원정보 삭제
 	public boolean delete (HttpServletRequest request) {
 		boolean result = false;
-		String hashedPwd = "";
-		// 디비에서 파일정보 가져온 후, 계정삭제가 성공하면 실제 경로에서 파일도 삭제한다
-		
-		String sql = " delete from jmember where mid = ? and pwd = ? ";
 		String sessionMid = (String) request.getSession().getAttribute("mid");
-		String inputPwd = (String) request.getParameter("pwd"); // 기본 비번으로 설정, 해싱되면 그것으로 변경됨
-		
-		// 비밀번호 해싱 to 문자열
-		try {
-			hashedPwd = GetHash.getHash(request.getParameter("pwd"));
-		} catch (NoSuchAlgorithmException nae) {
-			nae.printStackTrace();
-		}
+		String inputPwd = (String) request.getParameter("pwd"); // 기본 비번으로 설정, 해싱되면 그것을 투입
+		String deleteFileName = "";
+		String saltData = "";
+		String hashedPwd = "";
+		String sql = "";
 		
 		try {
 			this.conn = new DBConnect().getConn();
+			
+			// 디비에서 파일정보 가져온 후, 계정삭제가 성공하면 실제 경로에서 파일도 삭제한다
+			sql = " select photo from jmember where mid = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, sessionMid);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				deleteFileName = rs.getString("photo"); // 일단 저장만, 계정삭제가 완료된 후에 파일도 삭제
+			}
+			
+			// close 처리
+			rs.close();
+			ps.close();
+			
+			// db로부터 소금 코드 가져와서 검증할 비번 생성
+			sql = " select saltData from jmember_salt where mid = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, sessionMid); // 소금코드 얻는 쿼리에 세션으로부터 얻어온 sessinMid 세팅
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				saltData = rs.getString("saltData"); // saltData 얻어옴
+				hashedPwd = GetHashedData.generateHashedString(saltData + inputPwd); // 비번에 소금치기
+			}
+			
+			// close 처리
+			rs.close();
+			ps.close();
+			
+			// 삭제를 위해 새로운 쿼리 작성
+			sql = " delete from jmember where mid = ? and pwd = ? ";
 			conn.setAutoCommit(false);
 			
 			ps = this.conn.prepareStatement(sql);
 			ps.setString(1, sessionMid);
 			if (!hashedPwd.equals("")) {
-				System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", " + hashedPwd);
+				System.out.println("[삭제]요청아이디, 소금값, 비번: " + sessionMid + ", " + saltData + ", " + hashedPwd);
 				ps.setString(2, hashedPwd);
 			} else {
-				System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", 비번은 보호");
+				System.out.println("[삭제]요청아이디, 비번: " + sessionMid + ", 비번은 보호, 소금값 없음");
 				ps.setString(2, inputPwd);
 			}
 			int i = ps.executeUpdate();
@@ -404,6 +483,16 @@ public class JMemberDao {
 			if (i > 0) {
 				result = true;
 				conn.commit();
+				
+				// 삭제 성공 시 파일도 삭제
+				// 삭제할 파일경로 조립
+				deleteFileName = "D://git/JunggoProject/WebContent/img/jmember/" + deleteFileName.substring(deleteFileName.lastIndexOf("/") + 1, deleteFileName.length());
+				System.out.println("삭제할 파일경로: " + deleteFileName);
+				File delFile = new File(deleteFileName);
+				if (delFile.exists()) { // 존재한다면 삭제
+					delFile.delete();
+					System.out.println(deleteFileName + " 삭제완료!");
+				}
 			}
 		} catch (Exception ex) {
 			try {

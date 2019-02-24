@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import junggo.component.GetHash;
+import junggo.component.GetHashedData;
 
 /**
  * Servlet implementation class memberServlet
@@ -67,23 +67,12 @@ public class JMemberServlet extends HttpServlet {
 		switch (page) {
 		case "login":
 			//request 객체 << form 정보들이 담겨
-			String mid = request.getParameter("mid");
-		    String hashedPwd = request.getParameter("pwd"); // 그냥 비번 투입했다가 해시처리 후 해시결과 투입
-		    
-		    // 비밀번호 해싱 to 문자열
- 			try {
- 				hashedPwd = GetHash.getHash(request.getParameter("pwd"));
- 			} catch (NoSuchAlgorithmException nae) {
- 				nae.printStackTrace();
- 			}
- 			
- 			// 결과 출력
-		    System.out.println("id: " + mid);
-		    System.out.println("[login] hashedPwd : " + hashedPwd);
+			String inputMid = request.getParameter("mid");
+		    String inputPwd = request.getParameter("pwd"); // 그냥 비번 투입했다가 해시처리 후 해시결과 투입
 
 		    vo = new JMemberVo();
-		    vo.setMid(mid);
-		    vo.setPwd(hashedPwd);
+		    vo.setMid(inputMid);
+		    vo.setPwd(inputPwd);
 		    
 		    JMemberVo v = dao.login(vo); // 뷰로 반환할 vo 객체
 		    

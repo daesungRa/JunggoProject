@@ -146,11 +146,6 @@ function funcForgetPwd(){
 function funcMemberView () {
 	$('#showModifyPage').click(function () { // 회원정보 수정 페이지 로드
 		alert('회원정보 수정 페이지입니다.');
-		/*swal({
-		  title: "회원정보 수정",
-		  text: "회원정보 수정 페이지입니다",
-		  icon: "success",
-		});*/
 		$('#infoTitle').text('회원정보 수정');
 		// $('#mid').removeAttr('readonly');
 		$('#midChkResult').text('아이디는 수정 불가합니다.');
@@ -301,34 +296,7 @@ function funcModifySubmit (frm) {
 			if (result == '1') { // 회원정보 수정 성공, 뷰 페이지로 이동
 				alert('회원정보 수정에 성공했습니다.');
 				
-				// view 모달 열기
-				var modalWindow = document.getElementById('modalWindow');
-				var modalContent = document.getElementById('modalContent');
-				var innerModalContent = document.getElementById('innerModalContent');
-				
-				$.ajax({
-					type: 'get',
-					url: 'view.mb',
-					dataType: 'html',
-					success: function (html, status) {
-						// 에러코드 0 이면 세션아이디 없음, 에러코드 1 이면 조회된 결과 없음
-						if (html == "0") { // 세션아이디 없음
-							alert('접속 정보가 존재하지 않습니다. 로그인 후 이용해주세요.');
-							location.href = '/junggo/index.jsp';
-						} else if (html == "1") { // 조회결과 없음 (vo == null)
-							alert('현재 접속정보로 조회된 회원정보가 존재하지 않습니다. 확인 후 이용해주세요.');
-							location.href = '/junggo/index.jsp';
-						} else {
-							modalContent.setAttribute('style', 'height: 82%; margin: 7% auto;');
-							innerModalContent.setAttribute('style', 'position: absolute; width: 97%; height: 94%; top: 0;');
-							
-							innerModalContent.innerHTML = html;
-							modalWindow.style.display = 'block';
-							
-							funcMemberView();
-						}
-					}
-				});
+				$('#loadMemberView').trigger('click');
 			} else if (data == '0') { // 회원정보 수정 실패, 페이지 이동 없음
 				alert('회원정보 수정에 실패했습니다. 입력 정보를 다시 확인하세요. 혹은 비밀번호가 일치하지 않았을 수 있습니다.');
 				frm.irum.focus();

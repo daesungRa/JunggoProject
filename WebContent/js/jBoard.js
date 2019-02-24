@@ -31,6 +31,12 @@ function movePage(page,category){ //수정 02-20
 			$('#content').html(data);
 		});
 }
+function moveInsertPage(){
+	$.post('/junggoProject/views/jboard/jboard_insert.jsp',
+	function (data, status){
+		$('#content').html(data);
+	});
+}
 function bdSearch(category) { //수정 02-20
     var search = $('#tf').val();
 	$.post('list.bd',
